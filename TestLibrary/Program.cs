@@ -9,7 +9,7 @@ namespace TestLibrary {
 
         public static void Main(string[] args) {
             Console.WriteLine("Hello, world!");
-
+            Console.WriteLine(Add(1, 2));
             Console.ReadKey();
         }
 

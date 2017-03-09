@@ -41,8 +41,9 @@ namespace Teh.Decompiler.Builders {
             writer.AddIndent();
 
             // Write each method
+            TypeNamer namer = new TypeNamer();
             foreach (MethodDefinition method in Type.Methods) {
-                MethodBuilder builder = new MethodBuilder(method);
+                MethodBuilder builder = new MethodBuilder(method, namer);
                 builder.Build(writer);
                 writer.WriteLine();
             }

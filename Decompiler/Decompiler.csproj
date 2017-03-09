@@ -64,12 +64,22 @@
   <ItemGroup>
     <Compile Include="Builders\CodeBuilder.cs" />
     <Compile Include="Builders\IBuilder.cs" />
+    <Compile Include="Builders\Matchers\CallMatcher.cs" />
+    <Compile Include="Builders\Matchers\Operators\DivMatcher.cs" />
+    <Compile Include="Builders\Matchers\Operators\MulMatcher.cs" />
+    <Compile Include="Builders\Matchers\Operators\SubMatcher.cs" />
+    <Compile Include="Builders\Matchers\Operators\AddMatcher.cs" />
+    <Compile Include="Builders\Matchers\PopMatcher.cs" />
+    <Compile Include="Builders\Matchers\ReturnMatcher.cs" />
+    <Compile Include="Builders\Matchers\StringMatcher.cs" />
+    <Compile Include="Builders\Matchers\Variables\ArgsMatcher.cs" />
     <Compile Include="Builders\MethodBuilder.cs" />
     <Compile Include="Builders\TypeBuilder.cs" />
     <Compile Include="CodeWriter.cs" />
-    <Compile Include="Matchers\IPatternMatcher.cs" />
+    <Compile Include="Builders\Matchers\Matcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeNamer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

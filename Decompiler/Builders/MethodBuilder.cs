@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 namespace Teh.Decompiler.Builders {
     public class MethodBuilder : IBuilder {
         public MethodDefinition Method { get; }
+        public TypeNamer Namer { get; }
 
-        public MethodBuilder(MethodDefinition method) {
+        public MethodBuilder(MethodDefinition method, TypeNamer namer) {
             this.Method = method;
+            this.Namer = namer;
         }
 
         public void Build(CodeWriter writer) {
@@ -55,16 +57,23 @@ namespace Teh.Decompiler.Builders {
 
             writer.WriteLine();
 
-            // IL code
+            // Begin method body
             writer.WriteLine("{");
             writer.AddIndent();
+
+            // IL code
+            writer.WriteLine("/* IL */");
             foreach (Instruction il in Method.Body.Instructions) {
                 writer.WriteLine("//" + il.ToString());
             }
+            writer.WriteLine();
 
             // Decompiled code
+            writer.WriteLine("/* DECOMPILED */");
+            CodeBuilder builder = new CodeBuilder(this.Method, this.Namer, instructions: Method.Body.Instructions);
+            builder.Build(writer);
             
-
+            // End method body
             writer.RemoveIndent();
             writer.WriteLine("}");
         }
