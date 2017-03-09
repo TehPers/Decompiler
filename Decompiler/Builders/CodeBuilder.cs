@@ -19,16 +19,21 @@ namespace Teh.Decompiler.Builders {
 
         public void Build(CodeWriter writer) {
             while (Data.Instructions.Any()) {
-                IEnumerable<Matcher> possibleMatchers = from matcher in Matchers
-                                                               where matcher.Matches(Data)
-                                                        select matcher;
+                try {
+                    IEnumerable<Matcher> possibleMatchers = from matcher in Matchers
+                                                            where matcher.Matches(Data)
+                                                            select matcher;
 
-                if (possibleMatchers.Count() > 1) {
-                    writer.WriteLine($"//{Data.Instructions.Dequeue().ToString()} (Multiple matchers found)");
-                } else if (!possibleMatchers.Any()) {
-                    writer.WriteLine($"//{Data.Instructions.Dequeue().ToString()} (No matchers found)");
-                } else {
-                    possibleMatchers.First().Build(writer, Data);
+                    if (possibleMatchers.Count() > 1) {
+                        writer.WriteLine($"//{Data.Instructions.Dequeue().ToString()} (Multiple matchers found)");
+                    } else if (!possibleMatchers.Any()) {
+                        writer.WriteLine($"//{Data.Instructions.Dequeue().ToString()} (No matchers found)");
+                    } else {
+                        possibleMatchers.First().Build(writer, Data);
+                    }
+                } catch (Exception ex) {
+                    writer.WriteLine($"//{Data.Instructions.Dequeue().ToString()} (An error was thrown)");
+                    writer.WriteLine($"// Error: {ex.Message}");
                 }
             }
         }
@@ -42,7 +47,8 @@ namespace Teh.Decompiler.Builders {
             new SubMatcher(),
             new MulMatcher(),
             new DivMatcher(),
-            new ArgsMatcher()
+            new ArgsMatcher(),
+            new ConstantsMatcher()
         };
     }
 }

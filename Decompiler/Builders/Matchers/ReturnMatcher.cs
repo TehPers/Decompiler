@@ -9,10 +9,9 @@ namespace Teh.Decompiler.Builders.Matchers {
     public class ReturnMatcher : Matcher {
 
         public override void Build(CodeWriter writer, MatcherData data) {
-            string code = "return";
-            if (data.Stack.Count > 0) code = $"{code} {data.Stack.Pop()}";
-            writer.WriteLine($"{code};");
             data.Instructions.Dequeue();
+            if (data.Stack.Count > 0) writer.WriteLine($"return {data.Stack.Pop()};");
+            else if (data.Instructions.Any()) writer.WriteLine("return;");
         }
 
         public override bool Matches(MatcherData data) {

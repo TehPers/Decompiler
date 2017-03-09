@@ -19,7 +19,7 @@ namespace Teh.Decompiler.Builders.Matchers {
             }
 
             // TODO: Come up with a better naming scheme
-            string built = $"{reference.DeclaringType.FullName}.{reference.Name}({string.Join(", ", args)})";
+            string built = $"{data.Namer.GetName(reference.DeclaringType)}.{reference.Name}({string.Join(", ", args)})";
             if (reference.ReturnType.FullName == "System.Void") {
                 writer.WriteLine($"{built};");
             } else {

@@ -73,6 +73,7 @@
     <Compile Include="Builders\Matchers\ReturnMatcher.cs" />
     <Compile Include="Builders\Matchers\StringMatcher.cs" />
     <Compile Include="Builders\Matchers\Variables\ArgsMatcher.cs" />
+    <Compile Include="Builders\Matchers\Variables\ConstantsMatcher.cs" />
     <Compile Include="Builders\MethodBuilder.cs" />
     <Compile Include="Builders\TypeBuilder.cs" />
     <Compile Include="CodeWriter.cs" />

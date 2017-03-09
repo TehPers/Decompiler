@@ -29,8 +29,7 @@ namespace Teh.Decompiler.Builders {
                 writer.Write(Method.DeclaringType.Name);
             } else {
                 // Return type
-                if (Method.ReturnType.FullName == "System.Void") writer.Write("void ");
-                else writer.Write(Method.ReturnType.FullName + " ");
+                writer.Write(Namer.GetName(Method.ReturnType) + " ");
 
                 // Name
                 writer.Write(Method.Name);
@@ -49,9 +48,9 @@ namespace Teh.Decompiler.Builders {
 
             // Parameter list
             writer.Write("(");
-            writer.Write(string.Join(", ", (
+            writer.Write(string.Join(", ", (    
                 from param in Method.Parameters
-                select param.ParameterType.Name + " " + param.Name
+                select this.Namer.GetName(param.ParameterType) + " " + param.Name
                 )));
             writer.Write(")");
 

@@ -15,6 +15,29 @@ namespace Teh.Decompiler.Builders {
         }
 
         public void Build(CodeWriter writer) {
+            // Create namer
+            TypeNamer namer = new TypeNamer();
+            
+            // System types with custom keywords
+            namer.Aliases[Type.Module.TypeSystem.Boolean.FullName] = "bool";
+            namer.Aliases[Type.Module.TypeSystem.Byte.FullName] = "byte";
+            namer.Aliases[Type.Module.TypeSystem.Char.FullName] = "char";
+            namer.Aliases[Type.Module.TypeSystem.Double.FullName] = "double";
+            namer.Aliases[Type.Module.TypeSystem.Int16.FullName] = "short";
+            namer.Aliases[Type.Module.TypeSystem.Int32.FullName] = "int";
+            namer.Aliases[Type.Module.TypeSystem.Int64.FullName] = "long";
+            namer.Aliases[Type.Module.TypeSystem.Object.FullName] = "object";
+            namer.Aliases[Type.Module.TypeSystem.SByte.FullName] = "bool";
+            namer.Aliases[Type.Module.TypeSystem.Single.FullName] = "float";
+            namer.Aliases[Type.Module.TypeSystem.String.FullName] = "string";
+            namer.Aliases[Type.Module.TypeSystem.UInt16.FullName] = "ushort";
+            namer.Aliases[Type.Module.TypeSystem.UInt32.FullName] = "uint";
+            namer.Aliases[Type.Module.TypeSystem.UInt64.FullName] = "ulong";
+            namer.Aliases[Type.Module.TypeSystem.Void.FullName] = "void";
+
+            // This type
+            namer.Aliases[this.Type.FullName] = this.Type.Name;
+
             // Information
             writer.WriteLine($"// Assembly: {Type.Module.Assembly.Name}");
             writer.WriteLine($"// Module: {Type.Module.Name}");
@@ -41,7 +64,6 @@ namespace Teh.Decompiler.Builders {
             writer.AddIndent();
 
             // Write each method
-            TypeNamer namer = new TypeNamer();
             foreach (MethodDefinition method in Type.Methods) {
                 MethodBuilder builder = new MethodBuilder(method, namer);
                 builder.Build(writer);
