@@ -19,7 +19,12 @@ namespace Teh.Decompiler.Builders {
             writer.WriteLine($"// Assembly: {Type.Module.Assembly.Name}");
             writer.WriteLine($"// Module: {Type.Module.Name}");
             writer.WriteLine($"// Type: {Type.Name}");
-            
+
+            // Namespace
+            writer.WriteLine($"namespace {Type.Namespace}");
+            writer.WriteLine("{");
+            writer.AddIndent();
+
             // Modifiers
             writer.WriteIndent();
             if (Type.IsNotPublic) writer.Write("private ");
@@ -31,13 +36,22 @@ namespace Teh.Decompiler.Builders {
             writer.Write($"class {Type.Name}");
             writer.WriteLine();
 
-            // Write each method
+            // Opening brace - Type
             writer.WriteLine("{");
             writer.AddIndent();
+
+            // Write each method
             foreach (MethodDefinition method in Type.Methods) {
                 MethodBuilder builder = new MethodBuilder(method);
                 builder.Build(writer);
+                writer.WriteLine();
             }
+
+            // Closing brace - Type
+            writer.RemoveIndent();
+            writer.WriteLine("}");
+
+            // Closing brace - Namespace
             writer.RemoveIndent();
             writer.WriteLine("}");
         }
