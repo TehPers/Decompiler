@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Teh.Decompiler.Builders.Matchers.Variables {
-    public class ConstantsMatcher : Matcher {
+    public class IntMatcher : Matcher {
         public override void Build(CodeWriter writer, MatcherData data) {
             Instruction instruction = data.Instructions.Dequeue();
             int val;
@@ -19,9 +19,7 @@ namespace Teh.Decompiler.Builders.Matchers.Variables {
             else if (instruction.OpCode == OpCodes.Ldc_I4_6) val = 6;
             else if (instruction.OpCode == OpCodes.Ldc_I4_7) val = 7;
             else if (instruction.OpCode == OpCodes.Ldc_I4_8) val = 8;
-            else
-                val = (int) instruction.Operand;
-
+            else val = Convert.ToInt32(instruction.Operand);
             data.Stack.Push(val.ToString());
         }
 
@@ -36,7 +34,7 @@ namespace Teh.Decompiler.Builders.Matchers.Variables {
                 || next.OpCode == OpCodes.Ldc_I4_6
                 || next.OpCode == OpCodes.Ldc_I4_7
                 || next.OpCode == OpCodes.Ldc_I4_8
-                || next.OpCode == OpCodes.Ldc_I4;
+                || next.OpCode == OpCodes.Ldc_I4_S;
         }
     }
 }

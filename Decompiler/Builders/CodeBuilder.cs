@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Teh.Decompiler.Builders.Matchers;
+using Teh.Decompiler.Builders.Matchers.Fluff;
 using Teh.Decompiler.Builders.Matchers.Operators;
 using Teh.Decompiler.Builders.Matchers.Variables;
 
@@ -14,6 +15,7 @@ namespace Teh.Decompiler.Builders {
         public Matcher.MatcherData Data { get; }
 
         public CodeBuilder(MethodDefinition method, TypeNamer namer, IEnumerable<Instruction> instructions) {
+            // Instructions should not include "nop"s because they do nothing (by definition)
             this.Data = new Matcher.MatcherData(method, namer, instructions.Where(i => i.OpCode != OpCodes.Nop));
         }
 
@@ -36,6 +38,8 @@ namespace Teh.Decompiler.Builders {
                     writer.WriteLine($"// Error: {ex.Message}");
                 }
             }
+
+            if (Data.Stack.Any()) writer.WriteLine($"// Leftover stack: {string.Join(", ", Data.Stack)}");
         }
 
         public static List<Matcher> Matchers { get; } = new List<Matcher>() {
@@ -48,7 +52,10 @@ namespace Teh.Decompiler.Builders {
             new MulMatcher(),
             new DivMatcher(),
             new ArgsMatcher(),
-            new ConstantsMatcher()
+            new IntMatcher(),
+            new CompareMatcher(),
+            new StlocLdlocMatcher(),
+            new StlocBrSLdlocMatcher()
         };
     }
 }

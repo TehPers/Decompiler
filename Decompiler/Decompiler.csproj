@@ -65,6 +65,10 @@
     <Compile Include="Builders\CodeBuilder.cs" />
     <Compile Include="Builders\IBuilder.cs" />
     <Compile Include="Builders\Matchers\CallMatcher.cs" />
+    <Compile Include="Builders\Matchers\MatcherHelper.cs" />
+    <Compile Include="Builders\Matchers\Fluff\StlocBrSLdlocMatcher.cs" />
+    <Compile Include="Builders\Matchers\Fluff\StlocLdlocMatcher.cs" />
+    <Compile Include="Builders\Matchers\Operators\CompareMatcher.cs" />
     <Compile Include="Builders\Matchers\Operators\DivMatcher.cs" />
     <Compile Include="Builders\Matchers\Operators\MulMatcher.cs" />
     <Compile Include="Builders\Matchers\Operators\SubMatcher.cs" />
@@ -73,11 +77,12 @@
     <Compile Include="Builders\Matchers\ReturnMatcher.cs" />
     <Compile Include="Builders\Matchers\StringMatcher.cs" />
     <Compile Include="Builders\Matchers\Variables\ArgsMatcher.cs" />
-    <Compile Include="Builders\Matchers\Variables\ConstantsMatcher.cs" />
+    <Compile Include="Builders\Matchers\Variables\IntMatcher.cs" />
     <Compile Include="Builders\MethodBuilder.cs" />
     <Compile Include="Builders\TypeBuilder.cs" />
     <Compile Include="CodeWriter.cs" />
     <Compile Include="Builders\Matchers\Matcher.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeNamer.cs" />

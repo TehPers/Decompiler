@@ -9,7 +9,7 @@ namespace TestLibrary {
 
         public static void Main(string[] args) {
             Console.WriteLine("Hello, world!");
-            Console.WriteLine(Add(1, 2));
+            Console.WriteLine(Add(10, 2));
             Console.ReadKey();
         }
 
@@ -27,6 +27,11 @@ namespace TestLibrary {
 
         public static int Div(int a, int b) {
             return a / b;
+        }
+
+        public static int Max(int a, int b) {
+            if (a > b) return a;
+            return b;
         }
     }
 }

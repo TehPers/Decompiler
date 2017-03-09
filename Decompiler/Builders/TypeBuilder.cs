@@ -17,7 +17,7 @@ namespace Teh.Decompiler.Builders {
         public void Build(CodeWriter writer) {
             // Create namer
             TypeNamer namer = new TypeNamer();
-            
+
             // System types with custom keywords
             namer.Aliases[Type.Module.TypeSystem.Boolean.FullName] = "bool";
             namer.Aliases[Type.Module.TypeSystem.Byte.FullName] = "byte";
@@ -57,9 +57,19 @@ namespace Teh.Decompiler.Builders {
 
             // Class name
             writer.Write($"class {Type.Name}");
-            writer.WriteLine();
+
+            // Inherited types
+            List<string> inherited = new List<string>();
+            if (Type.BaseType != null && Type.BaseType.FullName != Type.Module.TypeSystem.Object.FullName)
+                inherited.Add(namer.GetName(Type.BaseType));
+
+            inherited.AddRange(from i in Type.Interfaces
+                               select namer.GetName(i));
+
+            if (inherited.Any()) writer.Write($" : {string.Join(", ", inherited)}");
 
             // Opening brace - Type
+            writer.WriteLine();
             writer.WriteLine("{");
             writer.AddIndent();
 
