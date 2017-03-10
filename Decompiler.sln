@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLibrary", "TestLibrary\TestLibrary.csproj", "{88C65080-4D22-4AE0-B201-B839B051441F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decompiler", "Decompiler\Decompiler.csproj", "{A32BDCF7-4B96-4528-81E4-E4473E5C3425}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphTest", "GraphTest\GraphTest.csproj", "{1E189FB8-E971-4D23-816D-7F77A0B0720D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A32BDCF7-4B96-4528-81E4-E4473E5C3425}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A32BDCF7-4B96-4528-81E4-E4473E5C3425}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A32BDCF7-4B96-4528-81E4-E4473E5C3425}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E189FB8-E971-4D23-816D-7F77A0B0720D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E189FB8-E971-4D23-816D-7F77A0B0720D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E189FB8-E971-4D23-816D-7F77A0B0720D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E189FB8-E971-4D23-816D-7F77A0B0720D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
