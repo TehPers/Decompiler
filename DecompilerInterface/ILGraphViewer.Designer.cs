@@ -27,8 +27,6 @@
             // 
             // GraphViewer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "GraphViewer";
             this.Size = new System.Drawing.Size(610, 615);
             this.ResumeLayout(false);

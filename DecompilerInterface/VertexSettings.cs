@@ -14,6 +14,8 @@ namespace Graphs.Visualizer {
         public Pen Edge { get; set; } = Pens.Black;
         public Brush FillHovered { get; set; } = Brushes.Red;
         public Pen EdgeHovered { get; set; } = Pens.Red;
+        public Brush FillDelected { get; set; } = Brushes.Gray;
+        public Pen EdgeDelected { get; set; } = Pens.Gray;
         public IEnumerable<VertexSettings> Targets { get; set; } = Enumerable.Empty<VertexSettings>();
 
         public VertexSettings(object vertex, float x, float y) : this(vertex, new PointF(x, y)) { }

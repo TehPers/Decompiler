@@ -46,12 +46,17 @@ namespace DecompilerInterface {
 
                     // Create Scintilla code viewer
                     Scintilla scintilla = new Scintilla() {
-                        Dock = DockStyle.Fill
+                        Dock = DockStyle.Fill,
+                        Text = code.ToString()
                     };
 
-                    SetScintillaStyles(scintilla);
+                    const int padding = 2;
+                    scintilla.Margins[0].Width = scintilla.TextWidth(Style.LineNumber, new string('9', scintilla.Lines.Count.ToString().Length + 1)) + padding;
+                    scintilla.Margins[1].Width = 0;
+                    scintilla.Margins[2].Width = 0;
+                    scintilla.Margins[3].Width = 0;
 
-                    scintilla.Text = code.ToString();
+                    SetScintillaStyles(scintilla);
                     scintilla.ReadOnly = true;
 
                     TabPage tab = new TabPage(type.Name);
@@ -61,7 +66,11 @@ namespace DecompilerInterface {
                     ILGraph graph = new ILGraph(method.Body.Instructions);
 
                     TabPage tab = new TabPage(method.Name);
-                    tab.Controls.Add(new ILGraphViewer(graph) { Dock = DockStyle.Fill });
+                    tab.Controls.Add(new ILGraphViewer(graph) {
+                        Location = Point.Empty,
+                        Anchor = AnchorStyles.Top | AnchorStyles.Left
+                    });
+                    tab.AutoScroll = true;
                     tcOutput.TabPages.Add(tab);
                 }
             }
@@ -89,10 +98,37 @@ namespace DecompilerInterface {
             scintilla.Styles[Style.Cpp.Operator].ForeColor = Color.Purple;
             scintilla.Styles[Style.Cpp.Preprocessor].ForeColor = Color.Maroon;
 
-
             // Set the keywords
             scintilla.SetKeywords(0, "abstract as base break case catch checked continue default delegate do else event explicit extern false finally fixed for foreach goto if implicit in interface internal is lock namespace new null object operator out override params private protected public readonly ref return sealed sizeof stackalloc switch this throw true try typeof unchecked unsafe using virtual while");
             scintilla.SetKeywords(1, "bool byte char class const decimal double enum float int long sbyte short static string struct uint ulong ushort void");
+
+            // Instruct the lexer to calculate folding
+            scintilla.SetProperty("fold", "1");
+            scintilla.SetProperty("fold.compact", "1");
+
+            // Configure a margin to display folding symbols
+            scintilla.Margins[2].Type = MarginType.Symbol;
+            scintilla.Margins[2].Mask = Marker.MaskFolders;
+            scintilla.Margins[2].Sensitive = true;
+            scintilla.Margins[2].Width = 20;
+
+            // Set colors for all folding markers
+            for (int i = 25; i <= 31; i++) {
+                scintilla.Markers[i].SetForeColor(SystemColors.ControlLightLight);
+                scintilla.Markers[i].SetBackColor(SystemColors.ControlDark);
+            }
+
+            // Configure folding markers with respective symbols
+            scintilla.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
+            scintilla.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
+            scintilla.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
+            scintilla.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
+            scintilla.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
+            scintilla.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
+            scintilla.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
+
+            // Enable automatic folding
+            scintilla.AutomaticFold = (AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change);
         }
 
         private void AddAssembly(AssemblyDefinition assembly) {
