@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1E189FB8-E971-4D23-816D-7F77A0B0720D}</ProjectGuid>
+    <ProjectGuid>{A186C8BA-A7B6-444C-9531-633E6EE0F33D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>GraphTest</RootNamespace>
-    <AssemblyName>GraphTest</AssemblyName>
+    <RootNamespace>Graphs</RootNamespace>
+    <AssemblyName>Graphs</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,6 +34,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -45,8 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Edge.cs" />
+    <Compile Include="Vertex.cs" />
+    <Compile Include="Visualizer\GraphRenderer.cs" />
+    <Compile Include="IEdge.cs" />
+    <Compile Include="Graph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visualizer\VertexSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

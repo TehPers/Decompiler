@@ -9,7 +9,7 @@ namespace Teh.Decompiler.Builders.Matchers.Operators {
     public class CompareMatcher : Matcher {
 
         public override void Build(CodeWriter writer, MatcherData data) {
-            Instruction i = data.Instructions.Dequeue();
+            Instruction i = data.Code.Dequeue();
 
             string op = null;
             if (i.OpCode == OpCodes.Cgt) op = ">";
@@ -22,7 +22,7 @@ namespace Teh.Decompiler.Builders.Matchers.Operators {
         }
 
         public override bool Matches(MatcherData data) {
-            Instruction i = data.Instructions.Peek();
+            Instruction i = data.Code.Peek();
             return i.OpCode == OpCodes.Cgt
                 || i.OpCode == OpCodes.Ceq
                 || i.OpCode == OpCodes.Clt;

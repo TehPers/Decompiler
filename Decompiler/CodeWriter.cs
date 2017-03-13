@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace Teh.Decompiler {
     public class CodeWriter {
 
-        public StreamWriter BaseWriter { get; }
+        public TextWriter BaseWriter { get; }
         public int IndentLevel { get; set; } = 0;
         public string Tab { get; set; } = "    ";
 
-        public CodeWriter(StreamWriter writer) {
+        public CodeWriter(TextWriter writer) {
             this.BaseWriter = writer;
         }
 

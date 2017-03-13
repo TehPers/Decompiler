@@ -10,7 +10,7 @@ namespace Teh.Decompiler.Builders.Matchers.Variables {
 
         public override void Build(CodeWriter writer, MatcherData data) {
             int arg;
-            Instruction i = data.Instructions.Dequeue();
+            Instruction i = data.Code.Dequeue();
             if (i.OpCode == OpCodes.Ldarg_0) arg = 0;
             else if (i.OpCode == OpCodes.Ldarg_1) arg = 1;
             else if (i.OpCode == OpCodes.Ldarg_2) arg = 2;
@@ -24,7 +24,7 @@ namespace Teh.Decompiler.Builders.Matchers.Variables {
         }
 
         public override bool Matches(MatcherData data) {
-            Instruction instruction = data.Instructions.Peek();
+            Instruction instruction = data.Code.Peek();
             return instruction.OpCode == OpCodes.Ldarg_0
                 || instruction.OpCode == OpCodes.Ldarg_1
                 || instruction.OpCode == OpCodes.Ldarg_2

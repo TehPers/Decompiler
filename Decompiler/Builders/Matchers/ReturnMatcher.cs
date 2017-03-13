@@ -9,13 +9,13 @@ namespace Teh.Decompiler.Builders.Matchers {
     public class ReturnMatcher : Matcher {
 
         public override void Build(CodeWriter writer, MatcherData data) {
-            data.Instructions.Dequeue();
+            data.Code.Dequeue();
             if (data.Stack.Count > 0) writer.WriteLine($"return {data.Stack.Pop()};");
-            else if (data.Instructions.Any()) writer.WriteLine("return;");
+            else if (data.Code.Any()) writer.WriteLine("return;");
         }
 
         public override bool Matches(MatcherData data) {
-            return data.Instructions.Peek().OpCode == OpCodes.Ret;
+            return data.Code.Peek().OpCode == OpCodes.Ret;
         }
     }
 }

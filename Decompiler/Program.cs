@@ -43,7 +43,7 @@ namespace Teh.Decompiler {
 
             //reader.Assembly.MainModule.EntryPoint.Body.Instructions;
 
-            //Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }

@@ -11,11 +11,11 @@ namespace Teh.Decompiler.Builders.Matchers.Operators {
             string b = data.Stack.Pop();
             string a = data.Stack.Pop();
             data.Stack.Push($"({a} - {b})");
-            data.Instructions.Dequeue();
+            data.Code.Dequeue();
         }
 
         public override bool Matches(MatcherData data) {
-            return data.Instructions.Peek().OpCode == OpCodes.Sub;
+            return data.Code.Peek().OpCode == OpCodes.Sub;
         }
     }
 }

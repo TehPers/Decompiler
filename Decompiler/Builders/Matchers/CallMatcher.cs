@@ -9,7 +9,7 @@ using Mono.Cecil;
 namespace Teh.Decompiler.Builders.Matchers {
     public class CallMatcher : Matcher {
         public override void Build(CodeWriter writer, MatcherData data) {
-            Instruction call = data.Instructions.Dequeue();
+            Instruction call = data.Code.Dequeue();
             MethodReference reference = call.Operand as MethodReference;
 
             // Get passed parameters
@@ -28,7 +28,7 @@ namespace Teh.Decompiler.Builders.Matchers {
         }
 
         public override bool Matches(MatcherData data) {
-            return data.Instructions.Peek().OpCode == OpCodes.Call;
+            return data.Code.Peek().OpCode == OpCodes.Call;
         }
     }
 }

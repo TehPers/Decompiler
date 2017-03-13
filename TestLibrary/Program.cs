@@ -13,6 +13,13 @@ namespace TestLibrary {
             Console.ReadKey();
         }
 
+        public static void ForTest(int n) {
+            do {
+                for (int i = 0; i < n; i++)
+                    Console.WriteLine(n);
+            } while (--n > 0);
+        }
+
         public static int Add(int a, int b) {
             return a + b;
         }

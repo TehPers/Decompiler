@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Teh.Decompiler.Builders.Matchers.Variables {
     public class IntMatcher : Matcher {
         public override void Build(CodeWriter writer, MatcherData data) {
-            Instruction instruction = data.Instructions.Dequeue();
+            Instruction instruction = data.Code.Dequeue();
             int val;
             if (instruction.OpCode == OpCodes.Ldc_I4_0) val = 0;
             else if (instruction.OpCode == OpCodes.Ldc_I4_1) val = 1;
@@ -24,7 +24,7 @@ namespace Teh.Decompiler.Builders.Matchers.Variables {
         }
 
         public override bool Matches(MatcherData data) {
-            Instruction next = data.Instructions.Peek();
+            Instruction next = data.Code.Peek();
             return next.OpCode == OpCodes.Ldc_I4_0
                 || next.OpCode == OpCodes.Ldc_I4_1
                 || next.OpCode == OpCodes.Ldc_I4_2

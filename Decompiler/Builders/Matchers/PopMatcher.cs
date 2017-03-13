@@ -10,11 +10,11 @@ namespace Teh.Decompiler.Builders.Matchers {
 
         public override void Build(CodeWriter writer, MatcherData data) {
             writer.WriteLine($"{data.Stack.Pop()};");
-            data.Instructions.Dequeue();
+            data.Code.Dequeue();
         }
 
         public override bool Matches(MatcherData data) {
-            return data.Instructions.Peek().OpCode == OpCodes.Pop;
+            return data.Code.Peek().OpCode == OpCodes.Pop;
         }
     }
 }

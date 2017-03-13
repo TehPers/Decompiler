@@ -10,17 +10,17 @@ namespace Teh.Decompiler.Builders.Matchers.Fluff {
 
         public override void Build(CodeWriter writer, MatcherData data) {
             // Take off these two
-            data.Instructions.Dequeue();
-            data.Instructions.Dequeue();
+            data.Code.Dequeue();
+            data.Code.Dequeue();
         }
 
         public override bool Matches(MatcherData data) {
-            int? loc = data.Instructions.Peek().GetStLoc();
+            int? loc = data.Code.Peek().GetStLoc();
             if (loc != null) {
-                Instruction[] instructions = data.Instructions.ToArray();
+                Instruction[] instructions = data.Code.ToArray();
                 if (instructions.Length < 2 || loc != instructions[1].GetLdLoc()) return false;
 
-                IEnumerable<Instruction> relevant = from i in data.Instructions
+                IEnumerable<Instruction> relevant = from i in data.Code
                                                     where i.GetStLoc() == loc || i.GetLdLoc() == loc
                                                     select i;
 

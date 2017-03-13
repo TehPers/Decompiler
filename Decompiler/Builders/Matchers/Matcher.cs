@@ -17,13 +17,13 @@ namespace Teh.Decompiler.Builders.Matchers {
         public class MatcherData {
             public MethodDefinition Method { get; }
             public TypeNamer Namer { get; }
-            public Queue<Instruction> Instructions { get; set; }
+            public Queue<Instruction> Code { get; set; }
             public Stack<string> Stack { get; } = new Stack<string>();
 
             public MatcherData(MethodDefinition method, TypeNamer namer, IEnumerable<Instruction> instructions) {
                 this.Method = method;
                 this.Namer = namer;
-                this.Instructions = new Queue<Instruction>(instructions);
+                this.Code = new Queue<Instruction>(instructions);
             }
         }
     }

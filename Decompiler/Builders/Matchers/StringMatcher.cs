@@ -9,11 +9,11 @@ namespace Teh.Decompiler.Builders.Matchers {
     public class StringMatcher : Matcher {
 
         public override void Build(CodeWriter writer, MatcherData data) {
-            data.Stack.Push($"\"{data.Instructions.Dequeue().Operand as string}\"");
+            data.Stack.Push($"\"{data.Code.Dequeue().Operand as string}\"");
         }
 
         public override bool Matches(MatcherData data) {
-            return data.Instructions.Peek().OpCode == OpCodes.Ldstr;
+            return data.Code.Peek().OpCode == OpCodes.Ldstr;
         }
     }
 }

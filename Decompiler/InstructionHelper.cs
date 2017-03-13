@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Teh.Decompiler.Builders.Matchers {
-    public static class MatcherHelper {
+namespace Teh.Decompiler {
+    public static class InstructionHelper {
 
         public static int? GetStLoc(this Instruction i) {
             if (i.OpCode == OpCodes.Stloc_0) return 0;
@@ -24,6 +22,20 @@ namespace Teh.Decompiler.Builders.Matchers {
             if (i.OpCode == OpCodes.Ldloc_3) return 3;
             if (i.OpCode == OpCodes.Ldloc_S) return Convert.ToInt32(i.Operand);
             return null;
+        }
+
+        public static Instruction GetBranchTarget(this Instruction i) {
+            return i.Operand as Instruction;
+        }
+
+        /// <summary>Gets the first instruction in the code at or past this instruction</summary>
+        public static Instruction GetThisOrNextInCode(this Instruction i, IEnumerable<Instruction> code) {
+            return code.FirstOrDefault(instruction => instruction.Offset >= i.Offset);
+        }
+
+        /// <summary>Gets the first instruction in the code past this instruction</summary>
+        public static Instruction GetNextInCode(this Instruction i, IEnumerable<Instruction> code) {
+            return code.FirstOrDefault(instruction => instruction.Offset > i.Offset);
         }
     }
 }

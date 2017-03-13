@@ -9,14 +9,17 @@ using Teh.Decompiler.Builders.Matchers;
 using Teh.Decompiler.Builders.Matchers.Fluff;
 using Teh.Decompiler.Builders.Matchers.Operators;
 using Teh.Decompiler.Builders.Matchers.Variables;
+using Teh.Decompiler.Graphs;
 
 namespace Teh.Decompiler.Builders {
     public class CodeBuilder : IBuilder {
         public Matcher.MatcherData Data { get; }
+        public ILGraph Graph { get; }
 
-        public CodeBuilder(MethodDefinition method, TypeNamer namer, IEnumerable<Instruction> instructions) {
+        public CodeBuilder(MethodDefinition method, TypeNamer namer, IEnumerable<Instruction> code) {
             // Instructions should not include "nop"s because they do nothing (by definition)
-            this.Data = new Matcher.MatcherData(method, namer, instructions.Where(i => i.OpCode != OpCodes.Nop));
+            this.Data = new Matcher.MatcherData(method, namer, code);
+            this.Graph = new ILGraph(code);
         }
 
         public void Build(CodeWriter writer) {
@@ -25,21 +28,36 @@ namespace Teh.Decompiler.Builders {
             // Pass 2: Create a directed graph of the code, where each instruction is a node, each instruction points to the next, and each branch also points to where it branches to
             // Pass 3: Convert the code to something that looks like C# using Matchers
 
-            while (Data.Instructions.Any()) {
+            /* Pass 1: Remove fluff */
+
+            /* Pass 2: Find cycles */
+            // Make all branches point to meaningful code
+            foreach (Instruction instruction in this.Data.Code)
+                if (instruction.Operand is Instruction target)
+                    instruction.Operand = target.GetThisOrNextInCode(this.Data.Code);
+
+            // Get all the cycles
+            IEnumerable<IEnumerable<Instruction>> cycles = this.Graph.GetCycles();
+            foreach (IEnumerable<Instruction> cycle in cycles) {
+                writer.WriteLine($"// Found cycle: {string.Join(", ", cycle.Select(i => $"IL_{i.Offset.ToString("X4")}: {i.OpCode.Name}"))}");
+            }
+
+            // Pass 3: Decompile
+            while (Data.Code.Any()) {
                 try {
                     IEnumerable<Matcher> possibleMatchers = from matcher in Matchers
                                                             where matcher.Matches(Data)
                                                             select matcher;
 
                     if (possibleMatchers.Count() > 1) {
-                        writer.WriteLine($"//{Data.Instructions.Dequeue().ToString()} (Multiple matchers found)");
+                        writer.WriteLine($"//{Data.Code.Dequeue().ToString()} (Multiple matchers found)");
                     } else if (!possibleMatchers.Any()) {
-                        writer.WriteLine($"//{Data.Instructions.Dequeue().ToString()} (No matchers found)");
+                        writer.WriteLine($"//{Data.Code.Dequeue().ToString()} (No matchers found)");
                     } else {
                         possibleMatchers.First().Build(writer, Data);
                     }
                 } catch (Exception ex) {
-                    writer.WriteLine($"//{Data.Instructions.Dequeue().ToString()} (An error was thrown)");
+                    writer.WriteLine($"//{Data.Code.Dequeue().ToString()} (An error was thrown)");
                     writer.WriteLine($"// Error: {ex.Message}");
                 }
             }
@@ -56,6 +74,7 @@ namespace Teh.Decompiler.Builders {
             new SubMatcher(),
             new MulMatcher(),
             new DivMatcher(),
+            new NotMatcher(),
             new ArgsMatcher(),
             new IntMatcher(),
             new CompareMatcher(),
