@@ -67,18 +67,17 @@
     <Compile Include="Builders\CodeBuilder.cs" />
     <Compile Include="Builders\IBuilder.cs" />
     <Compile Include="Builders\Matchers\CallMatcher.cs" />
+    <Compile Include="Builders\Matchers\Constructs\If.cs" />
+    <Compile Include="Builders\Matchers\Fluff\BrFluff.cs" />
+    <Compile Include="Builders\Matchers\Fluff\IFluffMatcher.cs" />
+    <Compile Include="Builders\Matchers\Fluff\LocFluff.cs" />
+    <Compile Include="Builders\Matchers\Fluff\NopFluff.cs" />
+    <Compile Include="Builders\Matchers\Constructs\DoWhile.cs" />
     <Compile Include="Builders\Matchers\Operators\NotMatcher.cs" />
+    <Compile Include="Builders\Matchers\SimpleMatcher.cs" />
     <Compile Include="InstructionHelper.cs" />
-    <Compile Include="Builders\Matchers\Fluff\StlocBrSLdlocMatcher.cs" />
-    <Compile Include="Builders\Matchers\Fluff\StlocLdlocMatcher.cs" />
-    <Compile Include="Builders\Matchers\Operators\CompareMatcher.cs" />
-    <Compile Include="Builders\Matchers\Operators\DivMatcher.cs" />
-    <Compile Include="Builders\Matchers\Operators\MulMatcher.cs" />
-    <Compile Include="Builders\Matchers\Operators\SubMatcher.cs" />
-    <Compile Include="Builders\Matchers\Operators\AddMatcher.cs" />
-    <Compile Include="Builders\Matchers\PopMatcher.cs" />
+    <Compile Include="Builders\Matchers\Operators\BinaryOperatorMatcher.cs" />
     <Compile Include="Builders\Matchers\ReturnMatcher.cs" />
-    <Compile Include="Builders\Matchers\StringMatcher.cs" />
     <Compile Include="Builders\Matchers\Variables\ArgsMatcher.cs" />
     <Compile Include="Builders\Matchers\Variables\IntMatcher.cs" />
     <Compile Include="Builders\MethodBuilder.cs" />
@@ -100,6 +99,7 @@
       <Name>Graphs</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

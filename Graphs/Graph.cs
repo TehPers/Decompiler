@@ -125,7 +125,9 @@ namespace Graphs {
                         cycle.Add(cur);
                     } while (!ReferenceEquals(cur, vertex));
 
-                    cycles.Add(cycle);
+                    // If the cycle has multiple elements or there is an edge from the only element in the cycle to itself
+                    if (cycle.Skip(1).Any() || this.Edges.Any(edge => ReferenceEquals(edge.Source, cycle.First()) && ReferenceEquals(edge.Target, edge.Source)))
+                        cycles.Add(cycle);
                 }
             }
         }

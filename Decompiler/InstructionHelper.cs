@@ -30,12 +30,25 @@ namespace Teh.Decompiler {
 
         /// <summary>Gets the first instruction in the code at or past this instruction</summary>
         public static Instruction GetThisOrNextInCode(this Instruction i, IEnumerable<Instruction> code) {
+            if (i == null || code == null) return i;
             return code.FirstOrDefault(instruction => instruction.Offset >= i.Offset);
         }
-
+        
         /// <summary>Gets the first instruction in the code past this instruction</summary>
         public static Instruction GetNextInCode(this Instruction i, IEnumerable<Instruction> code) {
             return code.FirstOrDefault(instruction => instruction.Offset > i.Offset);
+        }
+
+        /// <summary>Gets the last instruction in the code at or before this instruction</summary>
+        public static Instruction GetThisOrPreviousInCode(this Instruction i, IEnumerable<Instruction> code) {
+            if (i == null || code == null) return i;
+            return code.LastOrDefault(instruction => instruction.Offset <= i.Offset);
+        }
+
+        /// <summary>Gets the last instruction in the code before this instruction</summary>
+        public static Instruction GetPreviousInCode(this Instruction i, IEnumerable<Instruction> code) {
+            if (i == null || code == null) return i;
+            return code.LastOrDefault(instruction => instruction.Offset < i.Offset);
         }
     }
 }

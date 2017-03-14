@@ -13,11 +13,9 @@ namespace TestLibrary {
             Console.ReadKey();
         }
 
-        public static void ForTest(int n) {
-            do {
-                for (int i = 0; i < n; i++)
-                    Console.WriteLine(n);
-            } while (--n > 0);
+        public static void ConstructTest(int n) {
+            if (n > 10)
+                Console.WriteLine(n);
         }
 
         public static int Add(int a, int b) {

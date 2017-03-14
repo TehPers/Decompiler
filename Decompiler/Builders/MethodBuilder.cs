@@ -69,7 +69,6 @@ namespace Teh.Decompiler.Builders {
 
             // Decompiled code
             writer.WriteLine("/* DECOMPILED */");
-            writer.WriteLine("// Nevermind! This part isn't done yet anyway.");
             CodeBuilder builder = new CodeBuilder(this.Method, this.Namer, code: Method.Body.Instructions);
             builder.Build(writer);
             

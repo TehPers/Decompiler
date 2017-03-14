@@ -10,8 +10,8 @@ namespace Teh.Decompiler.Builders.Matchers {
 
         public override void Build(CodeWriter writer, MatcherData data) {
             data.Code.Dequeue();
-            if (data.Stack.Count > 0) writer.WriteLine($"return {data.Stack.Pop()};");
-            else if (data.Code.Any()) writer.WriteLine("return;");
+            if (data.Stack.Any()) writer.WriteLine($"return {data.Stack.Pop()};");
+            //else writer.WriteLine("return;");
         }
 
         public override bool Matches(MatcherData data) {

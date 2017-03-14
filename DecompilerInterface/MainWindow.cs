@@ -67,7 +67,7 @@ namespace DecompilerInterface {
                     tab.Controls.Add(scintilla);
                     tcOutput.TabPages.Add(tab);
                 } else if (node.Definition is MethodDefinition method) {
-                    ILGraph graph = new ILGraph(method.Body.Instructions);
+                    ILGraph graph = new CodeBuilder(method, new TypeNamer(), method.Body.Instructions).Graph;
 
                     TabPage tab = new TabPage(method.Name);
                     tab.Controls.Add(new ILGraphViewer(graph) {

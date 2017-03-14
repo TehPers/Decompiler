@@ -151,7 +151,7 @@ namespace DecompilerInterface {
 
                 tmpClock.Restart();
                 if (this.Hovered != null) {
-                    string hoverText = this.Hovered.ToString();
+                    string hoverText = this.Hovered.Vertex.ToString();
                     SizeF hoverSize = graphics.MeasureString(hoverText, this.Font);
                     RectangleF hoverRect = new RectangleF(mousePos + Cursor.Size, hoverSize);
                     hoverRect.Offset(

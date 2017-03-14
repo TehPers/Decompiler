@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Teh.Decompiler.Builders;
+using Teh.Decompiler.Graphs;
 
 namespace Teh.Decompiler.Builders.Matchers {
     public abstract class Matcher {
@@ -18,7 +19,8 @@ namespace Teh.Decompiler.Builders.Matchers {
             public MethodDefinition Method { get; }
             public TypeNamer Namer { get; }
             public Queue<Instruction> Code { get; set; }
-            public Stack<string> Stack { get; } = new Stack<string>();
+            public Stack<string> Stack { get; set; } = new Stack<string>();
+            public ILGraph Graph => new ILGraph(Code ?? new Queue<Instruction>());
 
             public MatcherData(MethodDefinition method, TypeNamer namer, IEnumerable<Instruction> instructions) {
                 this.Method = method;
