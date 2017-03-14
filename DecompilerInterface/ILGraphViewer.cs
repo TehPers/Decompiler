@@ -18,7 +18,9 @@ namespace DecompilerInterface {
         public float Spacing { get; set; } = 25f;
         public VertexSettings Selected { get; set; } = null;
         public VertexSettings Hovered { get; set; } = null;
-        public Point ClientMousePosition => this.PointToClient(MousePosition);
+        public Point ClientMousePosition => PointToClient(MousePosition);
+        
+        private RectangleF? lastHoverRectangle = null;
 
         public ILGraphViewer(ILGraph graph) {
             InitializeComponent();
@@ -49,15 +51,17 @@ namespace DecompilerInterface {
             }
             this.vertices = new SortedSet<VertexSettings>(vertices.Values, new VertexComparer());
 
-            this.Size = this.GetPreferredSize(this.Size);
+            this.Size = GetPreferredSize(this.Size);
+
+            this.Image = new Bitmap(this.Width, this.Height);
 
             this.Paint += (sender, e) => Redraw();
             this.MouseMove += (sender, e) => {
                 VertexSettings prevHovered = this.Hovered;
-                this.Hovered = this.vertices.Where(vertex => vertex.GetBounds().Contains(ClientMousePosition)).LastOrDefault();
+                this.Hovered = this.vertices.Where(vertex => vertex.GetBounds().Contains(this.ClientMousePosition)).LastOrDefault();
                 if (prevHovered != this.Hovered) Redraw();
             };
-            this.Click += (sender, e) => Select(ClientMousePosition);
+            this.Click += (sender, e) => Select(this.ClientMousePosition);
         }
 
         public void Select(float x, float y) => Select(new PointF(x, y));
@@ -70,19 +74,19 @@ namespace DecompilerInterface {
         public override Size GetPreferredSize(Size proposedSize) {
             Size s = proposedSize;
             if (Parent != null) {
-                s.Width = (int) Math.Max(s.Width, Parent.Width);
-                s.Height = (int) Math.Max(s.Height, Parent.Height);
+                s.Width = Math.Max(s.Width, Parent.Width);
+                s.Height = Math.Max(s.Height, Parent.Height);
             }
-            if (vertices.Any()) {
-                s.Width = (int) Math.Max(s.Width, 2 * Padding + vertices.Last().Center.X);
+            if (this.vertices.Any()) {
+                s.Width = (int) Math.Max(s.Width, 2 * this.Padding + this.vertices.Last().Center.X);
                 s.Height = (int) Math.Max(s.Height, (
-                    from vertex in vertices
+                    from vertex in this.vertices
                     where vertex.Vertex is Instruction
                     let vx = vertex.Center.X
                     from target in vertex.Targets
                     where (vertex.Vertex as Instruction).Next != target.Vertex
                     let tx = target.Center.X
-                    select 2 * Padding + vx + Math.Abs(tx - vx) / 2
+                    select 2 * this.Padding + vx + Math.Abs(tx - vx) / 2
                     ).LastOrDefault());
             }
             return s;
@@ -94,19 +98,26 @@ namespace DecompilerInterface {
             long edgeTime = 0;
             long vertexTime = 0;
             long hoverTime = 0;
+            long graphicsTime = 0;
 
             drawClock.Start();
-            Bitmap buffer = new Bitmap(this.Width, this.Height);
-            using (Graphics graphics = Graphics.FromImage(buffer)) {
+            tmpClock.Restart();
+            using (Graphics graphics = Graphics.FromImage(this.Image)) {
+                tmpClock.Stop();
+                graphicsTime = tmpClock.ElapsedMilliseconds;
                 Point mousePos = PointToClient(MousePosition);
 
+                if (this.lastHoverRectangle.HasValue)
+                    graphics.FillRectangle(Brushes.White, this.lastHoverRectangle.Value);
+                this.lastHoverRectangle = null;
+
                 // Draw edges
-                tmpClock.Start();
+                tmpClock.Restart();
                 foreach (VertexSettings vertex in this.vertices) {
                     Pen edgePen;
-                    if (Hovered == vertex || Selected == vertex)
+                    if (this.Hovered == vertex || this.Selected == vertex)
                         edgePen = vertex.EdgeHovered;
-                    else if (Selected == null)
+                    else if (this.Selected == null)
                         edgePen = vertex.Edge;
                     else
                         edgePen = vertex.EdgeDelected;
@@ -127,9 +138,9 @@ namespace DecompilerInterface {
                 tmpClock.Restart();
                 foreach (VertexSettings vertex in this.vertices) {
                     Brush vertexBrush;
-                    if (Hovered == vertex || Selected == vertex)
+                    if (this.Hovered == vertex || this.Selected == vertex)
                         vertexBrush = vertex.FillHovered;
-                    else if (Selected == null || Selected.Targets.Contains(vertex))
+                    else if (this.Selected == null || this.Selected.Targets.Contains(vertex))
                         vertexBrush = vertex.Fill;
                     else
                         vertexBrush = vertex.FillDelected;
@@ -139,27 +150,25 @@ namespace DecompilerInterface {
                 vertexTime = tmpClock.ElapsedMilliseconds;
 
                 tmpClock.Restart();
-                if (Hovered != null) {
-                    string hoverText = Hovered.ToString();
+                if (this.Hovered != null) {
+                    string hoverText = this.Hovered.ToString();
                     SizeF hoverSize = graphics.MeasureString(hoverText, this.Font);
                     RectangleF hoverRect = new RectangleF(mousePos + Cursor.Size, hoverSize);
                     hoverRect.Offset(
                         hoverRect.Right > this.Width ? this.Width - hoverRect.Right : 0,
                         hoverRect.Bottom > this.Height ? this.Height - hoverRect.Bottom : 0
                         );
+                    lastHoverRectangle = hoverRect;
                     graphics.FillRectangle(Brushes.Gold, hoverRect);
                     graphics.DrawString(hoverText, this.Font, new SolidBrush(this.ForeColor), hoverRect.Location);
                 }
                 tmpClock.Stop();
                 hoverTime = tmpClock.ElapsedMilliseconds;
             }
+            this.Image = this.Image;
             drawClock.Stop();
-            Console.WriteLine($"IL Graph: Redrew in {drawClock.ElapsedMilliseconds} milliseconds. (Edges: {edgeTime}ms, Vertices: {vertexTime}ms, Hover: {hoverTime}ms)");
 
-            Image old = this.Image;
-            this.Image = buffer;
-            if (old != null)
-                old.Dispose();
+            Console.WriteLine($"IL Graph: Redrew in {drawClock.ElapsedMilliseconds} milliseconds. (Edges: {edgeTime}ms, Vertices: {vertexTime}ms, Hover: {hoverTime}ms, Creating graphics: {graphicsTime}ms)");
         }
 
         private class VertexComparer : IComparer<VertexSettings> {
