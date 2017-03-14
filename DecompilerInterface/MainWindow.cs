@@ -22,7 +22,11 @@ namespace DecompilerInterface {
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1) {
+                string path = Path.GetFullPath(args[1]);
+                if (File.Exists(path)) AddAssembly(AssemblyDefinition.ReadAssembly(path));
+            }
         }
 
         private void OpenAssemblyToolStripMenuItem_Click(object sender, EventArgs e) {
