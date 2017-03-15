@@ -50,10 +50,11 @@ namespace Teh.Decompiler.Builders {
 
             // Modifiers
             writer.WriteIndent();
-            if (Type.IsNotPublic) writer.Write("private ");
             if (Type.IsPublic) writer.Write("public ");
-            if (Type.IsAbstract) writer.Write("abstract ");
-            if (Type.IsSealed) writer.Write("sealed ");
+            else if (Type.IsNotPublic) writer.Write("private ");
+            if (Type.IsAbstract && Type.IsSealed) writer.Write("static ");
+            else if (Type.IsAbstract) writer.Write("abstract ");
+            else if (Type.IsSealed) writer.Write("sealed ");
 
             // Class name
             writer.Write($"class {Type.Name}");

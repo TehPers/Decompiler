@@ -28,7 +28,7 @@ namespace Graphs {
         #region Graph Operations
 
         /// <summary>Must iterate through all edges</summary>
-        public Dictionary<TVertex, HashSet<TVertex>> Targets {
+        public virtual Dictionary<TVertex, HashSet<TVertex>> Targets {
             get {
                 Dictionary<TVertex, HashSet<TVertex>> output = new Dictionary<TVertex, HashSet<TVertex>>();
 
@@ -48,7 +48,7 @@ namespace Graphs {
         }
 
         /// <summary>Must iterate through all edges</summary>
-        public Dictionary<TVertex, HashSet<TVertex>> Sources {
+        public virtual Dictionary<TVertex, HashSet<TVertex>> Sources {
             get {
                 Dictionary<TVertex, HashSet<TVertex>> output = new Dictionary<TVertex, HashSet<TVertex>>();
 
@@ -67,12 +67,12 @@ namespace Graphs {
             }
         }
 
-        public IEnumerable<IEdge<TVertex>> GetEdges() {
+        public virtual IEnumerable<IEdge<TVertex>> GetEdges() {
             foreach (IEdge<TVertex> edge in this.Edges)
                 yield return edge;
         }
 
-        public IEnumerable<TVertex> GetRoots() {
+        public virtual IEnumerable<TVertex> GetRoots() {
             HashSet<TVertex> containingPrevious = new HashSet<TVertex>();
             foreach (IEdge<TVertex> edge in this.Edges)
                 if (this.Vertices.Contains(edge.Target))
@@ -81,7 +81,7 @@ namespace Graphs {
             return this.Vertices.Except(containingPrevious);
         }
 
-        public IEnumerable<IEnumerable<TVertex>> GetCycles() {
+        public virtual IEnumerable<IEnumerable<TVertex>> GetCycles() {
             int curIndex = 0;
             List<List<TVertex>> cycles = new List<List<TVertex>>();
             Stack<TVertex> stack = new Stack<TVertex>();

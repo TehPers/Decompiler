@@ -138,19 +138,19 @@ namespace DecompilerInterface {
         private void AddAssembly(AssemblyDefinition assembly) {
             TreeNode assemblyNode = new TreeNode(assembly.Name.Name);
             this.tvAssemblyViewer.Nodes.Add(assemblyNode);
-            foreach (ModuleDefinition module in assembly.Modules) {
+            foreach (ModuleDefinition module in assembly.Modules.OrderBy(m => m.Name)) {
                 TreeNode moduleNode = new TreeNode(module.Name);
                 assemblyNode.Nodes.Add(moduleNode);
 
-                foreach (String nspace in module.Types.Select(t => t.Namespace).Distinct()) {
+                foreach (String nspace in module.Types.Select(t => t.Namespace).Distinct().OrderBy(name => name)) {
                     TreeNode namespaceNode = new TreeNode(nspace);
                     moduleNode.Nodes.Add(namespaceNode);
 
-                    foreach (TypeDefinition type in module.Types.Where(t => t.Namespace == nspace)) {
+                    foreach (TypeDefinition type in module.Types.Where(t => t.Namespace == nspace).OrderBy(t => t.Name)) {
                         TreeNode typeNode = new DefinitionTreeNode(type);
                         namespaceNode.Nodes.Add(typeNode);
 
-                        foreach (MethodDefinition method in type.Methods) {
+                        foreach (MethodDefinition method in type.Methods.OrderBy(m => m.Name)) {
                             TreeNode methodNode = new DefinitionTreeNode(method);
                             typeNode.Nodes.Add(methodNode);
                         }

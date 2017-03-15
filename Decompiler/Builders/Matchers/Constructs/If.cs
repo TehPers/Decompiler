@@ -11,6 +11,9 @@ namespace Teh.Decompiler.Builders.Matchers.Constructs {
             Instruction branch = data.Code.Dequeue();
             Instruction target = branch.GetBranchTarget();
             if (target != null) {
+                // Check if else
+                //if ()
+
                 if (branch.OpCode == OpCodes.Brtrue || branch.OpCode == OpCodes.Brtrue_S)
                     writer.WriteLine($"if (!{data.Stack.Pop()})");
                 else if (branch.OpCode == OpCodes.Brfalse || branch.OpCode == OpCodes.Brfalse_S)

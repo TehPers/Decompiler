@@ -16,6 +16,8 @@ namespace TestLibrary {
         public static void ConstructTest(int n) {
             if (n > 10)
                 Console.WriteLine(n);
+            else
+                Console.WriteLine(n + 1);
         }
 
         public static int Add(int a, int b) {

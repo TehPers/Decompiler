@@ -11,7 +11,11 @@ namespace Teh.Decompiler {
             if (i.OpCode == OpCodes.Stloc_1) return 1;
             if (i.OpCode == OpCodes.Stloc_2) return 2;
             if (i.OpCode == OpCodes.Stloc_3) return 3;
-            if (i.OpCode == OpCodes.Stloc_S) return Convert.ToInt32(i.Operand);
+            if (i.OpCode == OpCodes.Stloc_S) {
+                if (i.Operand is VariableDefinition var)
+                    return 10000 + var.Index;
+                return Convert.ToInt32(i.Operand);
+            }
             return null;
         }
 
@@ -20,7 +24,11 @@ namespace Teh.Decompiler {
             if (i.OpCode == OpCodes.Ldloc_1) return 1;
             if (i.OpCode == OpCodes.Ldloc_2) return 2;
             if (i.OpCode == OpCodes.Ldloc_3) return 3;
-            if (i.OpCode == OpCodes.Ldloc_S) return Convert.ToInt32(i.Operand);
+            if (i.OpCode == OpCodes.Ldloc_S) {
+                if (i.Operand is VariableDefinition var)
+                    return 10000 + var.Index;
+                return Convert.ToInt32(i.Operand);
+            }
             return null;
         }
 
@@ -33,7 +41,7 @@ namespace Teh.Decompiler {
             if (i == null || code == null) return i;
             return code.FirstOrDefault(instruction => instruction.Offset >= i.Offset);
         }
-        
+
         /// <summary>Gets the first instruction in the code past this instruction</summary>
         public static Instruction GetNextInCode(this Instruction i, IEnumerable<Instruction> code) {
             return code.FirstOrDefault(instruction => instruction.Offset > i.Offset);

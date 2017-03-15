@@ -13,17 +13,19 @@ using Teh.Decompiler.Graphs;
 namespace Teh.Decompiler.Builders {
     public class CodeBuilder : IBuilder {
         public Matcher.MatcherData Data { get; }
-        public ILGraph Graph { get; }
+        public ILGraph Graph => new ILGraph(Data.Code);
 
         public CodeBuilder(MethodDefinition method, TypeNamer namer, IEnumerable<Instruction> code) {
             // Instructions should not include "nop"s because they do nothing (by definition)
             this.Data = new Matcher.MatcherData(method, namer, code);
             RemoveFluff();
-            this.Graph = new ILGraph(this.Data.Code);
         }
 
         // Pass 1
         private void RemoveFluff() {
+            // Remove unreachable code
+            this.Data.Code = new Queue<Instruction>(this.Data.Code.Intersect(this.Graph.GetReachableCode()));
+            
             // Run through each fluff matcher and remove the fluff returned
             foreach (IFluffMatcher fluffMatcher in Fluffs) {
                 IEnumerable<Instruction> fluff = fluffMatcher.GetFluff(this.Data);
